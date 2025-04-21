@@ -1,10 +1,12 @@
 # collision_attack_md5
 CHƯƠNG 7. DEMO TẤN CÔNG VA CHẠM TRÊN HÀM BĂM MD5
+
 7.1. Cơ sở lý thuyết
 Tấn công va chạm cho phép chúng ta tạo ra hai thông điệp có cùng hàm băm MD5 và cùng một tiền tố tùy chọn (giống nhau). Do hành vi mở rộng độ dài (length-extension) của MD5, chúng ta có thể nối thêm bất kỳ hậu tố nào vào cả hai thông điệp và vẫn đảm bảo rằng các thông điệp dài hơn đó cũng sẽ có cùng giá trị băm. Điều này cho phép ta tạo ra các tệp khác nhau chỉ ở phần “collision” ở giữa, nhưng có cùng giá trị băm MD5, tức là có dạng:
 prefix + collisionA + suffix
 prefix + collisionB + suffix
 Chúng ta có thể tận dụng điều này để tạo ra hai chương trình có cùng hàm băm MD5 nhưng có hành vi hoàn toàn khác nhau. 
+
 7.2. Các bước thực hiện
 Ta sẽ tiến hành tạo 2 file thực thi có mã băm md5 giống hệt nhau nhưng nội dung hoàn toàn khác nhau. 1 file sẽ in ra màn hình 1 đoạn thông báo đơn giản, còn 1 file sẽ mở shell /bin/sh
 Trước tiên, ta cần tạo file prefix với nội dung là 1 shebang để thự thi các đoạn mã php
