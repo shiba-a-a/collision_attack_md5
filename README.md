@@ -17,45 +17,45 @@ Ta sẽ tiến hành tạo 2 file thực thi có mã băm md5 giống hệt nhau
 Trước tiên, ta cần tạo file prefix với nội dung là 1 shebang để thự thi các đoạn mã php
 
 
-![alt text](image.png)
+![alt text](image/image-0.png)
 
 Để tạo phần collision, ta sử dụng công cụ fastcoll: https://github.com/brimstone/fastcoll
 
 fastcoll là một công cụ nổi tiếng được viết bằng ngôn ngữ C++ bởi Marc Stevens dùng để tạo các đoạn collision từ 1 đầu vào prefix
 
 
-![alt text](image-1.png)
+![alt text](image/image-1.png)
 
 
-![alt text](image-2.png)
+![alt text](image/image-2.png)
 
 Với phần suffix, ta dùng đoạn mã python sau để tạo các đoạn code php tùy chỉnh cho 2 file thực thi
 
 
-![alt text](image-3.png)
+![alt text](image/image-3.png)
 
 
-![alt text](image-4.png)
+![alt text](image/image-4.png)
 
 Tiến hành chèn phần suffix vào cuối 2 file thực thi 
 
-![alt text](image-5.png)
+![alt text](image/image-5.png)
 
 
 
 Kiểm tra mã băm md5 của 2 file, ta thấy chúng giống hệt nhau
 
 
-![alt text](image-6.png)
+![alt text](image/image-6.png)
 
 Tuy nhiên, khi ta thực thi 2 file, kết quả lại hoàn toàn khác nhau
 
 Với file md5_data1, khi thực thi màn hình chỉ in một đoạn thông báo
 
 
-![alt text](image-7.png)
+![alt text](image/image-7.png)
 
 Với file md5_data2, khi thực thi ta nhận được một shell /bin/sh
 
 
-![alt text](image-8.png)
+![alt text](image/image-8.png)
