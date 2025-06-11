@@ -1,61 +1,143 @@
-# collision_attack_md5
-CHƯƠNG 7. DEMO TẤN CÔNG VA CHẠM TRÊN HÀM BĂM MD5
 
-7.1. Cơ sở lý thuyết
+# 🔐 MD5 Collision Attack Demo
 
-Tấn công va chạm cho phép chúng ta tạo ra hai thông điệp có cùng hàm băm MD5 và cùng một tiền tố tùy chọn (giống nhau). Do hành vi mở rộng độ dài (length-extension) của MD5, chúng ta có thể nối thêm bất kỳ hậu tố nào vào cả hai thông điệp và vẫn đảm bảo rằng các thông điệp dài hơn đó cũng sẽ có cùng giá trị băm. Điều này cho phép ta tạo ra các tệp khác nhau chỉ ở phần “collision” ở giữa, nhưng có cùng giá trị băm MD5, tức là có dạng:
+![MD5 Status](https://img.shields.io/badge/MD5-Insecure-red)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Language](https://img.shields.io/badge/language-PHP%20%26%20Python-yellow)
 
+> Demo thực tế tấn công va chạm trên hàm băm MD5: tạo hai tệp thực thi có cùng mã băm nhưng hành vi hoàn toàn khác nhau.
+
+---
+
+## 🧠 Tổng Quan
+
+Tấn công va chạm (collision attack) cho phép tạo **hai thông điệp khác nhau** nhưng có cùng **hash MD5**.
+
+Cấu trúc:
+
+```text
 prefix + collisionA + suffix
-
 prefix + collisionB + suffix
+```
 
-Chúng ta có thể tận dụng điều này để tạo ra hai chương trình có cùng hàm băm MD5 nhưng có hành vi hoàn toàn khác nhau. 
+Do tính chất *length extension* của MD5, việc thêm `suffix` giống nhau sau phần `collision` không làm thay đổi giá trị băm. Điều này cho phép:
 
-7.2. Các bước thực hiện
+- Hai file khác nhau.
+- Cùng một mã băm.
+- Hành vi khác biệt khi thực thi.
 
-Ta sẽ tiến hành tạo 2 file thực thi có mã băm md5 giống hệt nhau nhưng nội dung hoàn toàn khác nhau. 1 file sẽ in ra màn hình 1 đoạn thông báo đơn giản, còn 1 file sẽ mở shell /bin/sh
-Trước tiên, ta cần tạo file prefix với nội dung là 1 shebang để thự thi các đoạn mã php
+---
 
+## 🎯 Mục Tiêu
 
-![alt text](image/image-0.png)
+Tạo 2 file:
 
-Để tạo phần collision, ta sử dụng công cụ fastcoll: https://github.com/brimstone/fastcoll
+| Tên file     | Hành vi khi thực thi                |
+|--------------|--------------------------------------|
+| `md5_data1`  | In ra dòng thông báo đơn giản.       |
+| `md5_data2`  | Mở shell `/bin/sh`.                  |
 
-fastcoll là một công cụ nổi tiếng được viết bằng ngôn ngữ C++ bởi Marc Stevens dùng để tạo các đoạn collision từ 1 đầu vào prefix
+---
 
+## ⚙️ Các Bước Thực Hiện
 
-![alt text](image/image-1.png)
+### 📌 1. Tạo prefix
 
+<details>
+<summary>📁 Nội dung file <code>prefix</code></summary>
 
-![alt text](image/image-2.png)
+```php title="prefix"
+#!/usr/bin/php
+<?php
+```
 
-Với phần suffix, ta dùng đoạn mã python sau để tạo các đoạn code php tùy chỉnh cho 2 file thực thi
+![prefix](image/image-0.png)
+</details>
 
+---
 
-![alt text](image/image-3.png)
+### ⚡ 2. Tạo phần collision với fastcoll
 
+Clone công cụ:
 
-![alt text](image/image-4.png)
+```bash
+git clone https://github.com/brimstone/fastcoll
+cd fastcoll
+make
+```
 
-Tiến hành chèn phần suffix vào cuối 2 file thực thi 
+Tạo collision:
 
-![alt text](image/image-5.png)
+```bash
+fastcoll -p prefix -o md5_data1 md5_data2
+```
 
+![fastcoll](image/image-1.png)  
+![fastcoll-output](image/image-2.png)
 
+---
 
-Kiểm tra mã băm md5 của 2 file, ta thấy chúng giống hệt nhau
+### ✍️ 3. Thêm mã độc lập vào phần `suffix`
 
+```python title="add_suffix.py"
+with open("md5_data1", "ab") as f:
+    f.write(b'echo "Hello from benign file!";\n')
 
-![alt text](image/image-6.png)
+with open("md5_data2", "ab") as f:
+    f.write(b'system("/bin/sh");\n')
+```
 
-Tuy nhiên, khi ta thực thi 2 file, kết quả lại hoàn toàn khác nhau
+![python-suffix](image/image-3.png)  
+![python-suffix2](image/image-4.png)
 
-Với file md5_data1, khi thực thi màn hình chỉ in một đoạn thông báo
+---
 
+### 🧩 4. Gắn suffix vào cuối file
 
-![alt text](image/image-7.png)
+```bash
+python3 add_suffix.py
+```
 
-Với file md5_data2, khi thực thi ta nhận được một shell /bin/sh
+![insert-suffix](image/image-5.png)
 
+---
 
-![alt text](image/image-8.png)
+### ✅ 5. Kiểm tra mã băm
+
+```bash
+md5sum md5_data1
+md5sum md5_data2
+```
+
+> 🎉 Kết quả: **2 file có cùng mã băm MD5**
+
+![md5-check](image/image-6.png)
+
+---
+
+### 🚀 6. Thực thi và kiểm chứng
+
+- **File 1: `md5_data1`**
+
+  Kết quả: in ra dòng chữ.
+
+  ![run1](image/image-7.png)
+
+- **File 2: `md5_data2`**
+
+  Kết quả: mở shell `/bin/sh`.
+
+  ![run2](image/image-8.png)
+
+---
+
+## 🧯 Kết Luận
+
+- MD5 không còn an toàn để sử dụng trong các hệ thống cần xác thực dữ liệu, chữ ký số hoặc kiểm tra tính toàn vẹn file.
+- Tấn công va chạm MD5 có thể bị lợi dụng để giả mạo dữ liệu hoặc vượt qua hệ thống xác minh đơn giản.
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
