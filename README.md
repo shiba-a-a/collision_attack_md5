@@ -61,9 +61,15 @@ Tạo 2 file:
 Clone công cụ:
 
 ```bash
-git clone https://github.com/brimstone/fastcoll
+#!/bin/bash -ex
+
+[ -e fastcoll ] || git clone https://github.com/upbit/clone-fastcoll fastcoll
 cd fastcoll
 make
+
+cd ..
+mkdir bin
+cp fastcoll/fastcoll bin
 ```
 
 Tạo collision:
