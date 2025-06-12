@@ -1,10 +1,6 @@
 
 # 🔐 MD5 Collision Attack Demo
 
-![MD5 Status](https://img.shields.io/badge/MD5-Insecure-red)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Language](https://img.shields.io/badge/language-PHP%20%26%20Python-yellow)
-
 > Demo thực tế tấn công va chạm trên hàm băm MD5: tạo hai tệp thực thi có cùng mã băm nhưng hành vi hoàn toàn khác nhau.
 
 ---
@@ -134,16 +130,3 @@ md5sum md5_data2
   Kết quả: mở shell `/bin/sh`.
 
   ![run2](image/image-8.png)
-
----
-
-## 🧯 Kết Luận
-
-- MD5 không còn an toàn để sử dụng trong các hệ thống cần xác thực dữ liệu, chữ ký số hoặc kiểm tra tính toàn vẹn file.
-- Tấn công va chạm MD5 có thể bị lợi dụng để giả mạo dữ liệu hoặc vượt qua hệ thống xác minh đơn giản.
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License.
